@@ -1,12 +1,13 @@
-import { useState, useCallback,useEffect ,useRef} from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 
 function App() {
   const [length, setLength] = useState(8);
   const [numberAllowed, setNumberAllowed] = useState(false);
   const [charAllowed, setCharAllowed] = useState(false);
   const [password, setpassword] = useState("");
+  const [copied, setCopied] = useState(false);
 
-  const passRef=useRef(null)
+  const passRef = useRef(null);
 
   const passGenerator = useCallback(() => {
     let pass = "";
@@ -22,16 +23,17 @@ function App() {
     setpassword(pass);
   }, [length, numberAllowed, charAllowed, setpassword]);
 
-  const copytoClip=useCallback(()=>{
-   passRef.current?.select()
-  
-    
-    window.navigator.clipboard.writeText(password)
-  },[password])
+  const copytoClip = useCallback(() => {
+    passRef.current?.select();
 
-  useEffect(()=>{
-  passGenerator()
-  },[length,numberAllowed,charAllowed,passGenerator])
+    window.navigator.clipboard.writeText(password);
+    alert("Copied to Clipboard")
+    
+  }, [password]);
+
+  useEffect(() => {
+    passGenerator();
+  }, [length, numberAllowed, charAllowed, passGenerator]);
 
   return (
     <>
@@ -46,7 +48,10 @@ function App() {
             readOnly
             ref={passRef}
           />
-          <button className="outline-none rounded-md bg-pink-500 text-black px-3 py-0.5 shrink-0" onClick={copytoClip}>
+          <button
+            className="text-sm flex px-2 bg-pink-400 text-black"
+            onClick={copytoClip} 
+          >
             Copy
           </button>
         </div>
